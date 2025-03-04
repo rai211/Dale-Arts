@@ -2,25 +2,47 @@
 import { useState } from "react"; 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/config";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const validateSignup = () => {
+    if (!email.trim()) {
+      toast.error("Email is required.");
+      return false;
+    }
+    if (!password.trim()) {
+      toast.error("Password is required.");
+      return false;
+    }
+    if (password.length < 6) {
+      toast.error("Password should be at least 6 characters long.");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return false;
+    }
+    return true;
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    if (!validateSignup()) return;
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log("User Created:", userCredential.user);
-  } catch (error) {
-    console.error("Firebase Auth Error:", error.message);
-  }
-};
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User Created:", userCredential.user);
+      toast.success("Account created successfully!");
+    } catch (error) {
+      console.error("Error during signup:", error.message);
+      toast.error(error.message);
+    }
+  };
 
 
   return (
