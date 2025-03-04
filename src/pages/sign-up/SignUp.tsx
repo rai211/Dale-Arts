@@ -2,12 +2,14 @@
 import { useState } from "react"; 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/config";
+import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const validateSignup = () => {
     if (!email.trim()) {
@@ -22,10 +24,6 @@ const SignUp = () => {
       toast.error("Password should be at least 6 characters long.");
       return false;
     }
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match.");
-      return false;
-    }
     return true;
   };
 
@@ -37,13 +35,13 @@ const SignUp = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log("User Created:", userCredential.user);
-      toast.success("Account created successfully!");
+      toast.success("Account created successfully!"); 
+      router.push('/signIn');
     } catch (error) {
       console.error("Error during signup:", error.message);
       toast.error(error.message);
     }
   };
-
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
@@ -79,6 +77,7 @@ const SignUp = () => {
             Sign Up
           </button>
         </form>
+        <ToastContainer />
       </div>
     </div>
   );

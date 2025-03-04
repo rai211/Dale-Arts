@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
 
 
 
@@ -45,7 +44,7 @@ const SignIn = () => {
   };
 
   const redirectToSignup = () => {
-    window.location.assign("/sign-up");
+    window.location.assign("/signup");
   };
   
 
@@ -91,6 +90,7 @@ const SignIn = () => {
             Sign Up
             </button>
         </p>
+        <ToastContainer />
       </div>
     </div>
   );
